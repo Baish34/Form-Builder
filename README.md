@@ -1,124 +1,129 @@
-# Form Builder
-
-A modern, feature-rich form builder and management application built with React Remix. Create, share, and collect responses with a clean, intuitive interface.
-
-**Live Demo:** [https://form-builder-alpha-ten.vercel.app/](https://form-builder-alpha-ten.vercel.app/)
-**Video Demo:** [https://youtu.be/2URwDjsSQgk/](https://youtu.be/2URwDjsSQgk/)
-
-![image](https://github.com/user-attachments/assets/97f72dc5-aba0-4d5d-af95-0630cbfa4425)
+FormCraft
+A dynamic and intuitive form creation and management platform built with React Remix. Design, share, and analyze responses with a sleek, user-friendly interface.
 
 
-## Features
+Features
+Form Design
 
-### Form Building
-- **Drag-and-Drop Interface**: Easily create forms by dragging components from the palette
-- **Multiple Field Types**: Support for text, textarea, select, checkbox, radio, date, email, phone, and number fields
-- **Field Customization**: Configure field properties like labels, placeholders, required status, and help text
-- **Form Preview**: Real-time preview of your form as you build it
-- **Responsive Design Preview**: Test how your form looks on desktop, tablet, and mobile devices
+Drag-and-Drop Builder: Easily construct forms by dragging components from a library.
+Field Variety: Supports text, textarea, dropdown, checkbox, radio, date, email, phone, and number fields.
+Field Customization: Edit labels, placeholders, required status, and helper text.
+Live Preview: View your form in real-time during creation.
+Responsive Preview: Check form appearance on desktop, tablet, and mobile.
 
-### Form Management
-- **Templates**: Save and reuse form templates for common use cases
-- **Built-in Templates**: Pre-built templates for common form types (Contact, Survey)
-- **Dark Mode**: Toggle between light and dark themes for comfortable editing
+Form Organization
 
-### Form Sharing
-- **Shareable Links**: Generate unique links to share your forms with respondents
-- **Copy to Clipboard**: One-click copying of form links
-- **Form Status**: Track the number of responses for each form
+Reusable Templates: Save forms as templates for quick reuse.
+Pre-Designed Templates: Includes templates for common forms (e.g., Contact, Survey).
+Theme Options: Switch between light and dark modes for comfortable editing.
 
-### Response Collection
-- **Response Viewer**: View all responses in a clean, tabular format
-- **Response Filtering**: Select specific forms to view their responses
-- **Export to CSV**: Download responses as CSV files for further analysis
-- **Response Statistics**: See the number of responses for each form at a glance
+Form Distribution
 
-### User Experience
-- **Modern UI**: Clean, intuitive interface with smooth animations
-- **Offline Capability**: Forms and responses are stored in localStorage
-- **Progress Saving**: Form fillers can save their progress and return later
-- **Validation**: Built-in validation for required fields and specific field types
+Shareable URLs: Generate unique links for sharing forms.
+One-Click Copy: Copy form links to clipboard instantly.
+Response Tracking: Monitor response counts for each form.
 
-## Technical Details
+Response Management
 
-### Architecture
-- **React Remix**: Built with React Remix for server-rendered React applications
-- **State Management**: Uses React's Context API and useReducer for state management
-- **Local Storage**: Stores forms, templates, and responses in browser localStorage
-- **CSS**: Styled with Tailwind CSS for a responsive, modern design
+Response Dashboard: View submissions in a clear, tabular format.
+Response Filtering: Select specific forms to review their responses.
+CSV Export: Download response data as CSV files.
+Submission Stats: Instant insights into response counts.
 
-### Data Storage
-- **Forms**: Stored in `formBuilderForms` localStorage key
-- **Shared Forms**: Stored in `sharedForms` localStorage key
-- **Templates**: Stored in `customFormTemplates` localStorage key
-- **Responses**: Stored in `formResponses` localStorage key
-- **In-Progress Forms**: Stored in `formFillerProgress` localStorage key
+User Experience
 
-### Components
-- **FormBuilderMain**: Main form builder interface
-- **FieldPalette**: Draggable field components
-- **FormCanvas**: Form editing area
-- **FormPreview**: Real-time form preview
-- **FormFiller**: Form response interface for end-users
-- **ResponseViewer**: View and export form responses
-- **FieldEditor**: Edit field properties
+Modern Interface: Clean design with smooth animations.
+Offline Support: Stores forms and responses in localStorage.
+Progress Saving: Respondents can save and resume form progress.
+Input Validation: Built-in validation for required fields and specific input types.
 
-## Getting Started
+Technical Details
+Architecture
 
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
+Framework: Built with React Remix for server-side rendering.
+State Management: Uses React Context API and useReducer for efficient state handling.
+Styling: Leverages Tailwind CSS for responsive design.
+Storage: Saves data in browser localStorage.
 
-### Installation
+Data Storage
 
-1. Clone the repository:
-```bash
-git clone [https://github.com/Prabhsingh0401/Form-Builder.git](https://github.com/Prabhsingh0401/Form-Builder-Remix.git)
-cd form-builder
-```
+Forms: formBuilderForms
+Shared Forms: sharedForms
+Templates: customFormTemplates
+Responses: formResponses
+In-Progress Submissions: formFillerProgress
 
-2. Install dependencies:
-```bash
+Components
+
+FormCraftCore: Main form-building interface.
+FieldLibrary: Draggable field components.
+FormWorkspace: Form editing canvas.
+FormViewer: Real-time form preview.
+ResponseCollector: End-user form submission interface.
+ResponseAnalyzer: Tool for viewing and exporting responses.
+FieldConfigurator: Interface for editing field properties.
+
+Getting Started
+Prerequisites
+
+Node.js (v14 or higher)
+npm or yarn
+
+Installation
+
+Clone the repository:
+git clone https://github.com/Prabhsingh0401/Form-Builder-Remix.git
+cd form-craft
+
+
+Install dependencies:
 npm install
 # or
 yarn install
-```
 
-3. Start the development server:
-```bash
+
+Start the development server:
 npm run dev
 # or
 yarn dev
-```
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-## Usage Guide
+Open http://localhost:5173 in your browser.
 
-### Creating a Form
-1. Open the Form Builder
-2. Drag fields from the left palette onto the canvas
-3. Click on fields to edit their properties
-4. Use the preview panel to see how your form will look
-5. Click "Save" to save your form
 
-### Using Templates
-1. Click "Templates" to view available templates
-2. Select a template to load it into the editor
-3. Customize the template as needed
-4. To save your own template, click "Template it"
+Usage
+Creating a Form
 
-### Sharing Forms
-1. Click the "Share" button
-2. The form link will be copied to your clipboard
-3. Share this link with your respondents
+Open the FormCraft interface.
+Drag fields from the component library to the workspace.
+Click fields to edit their properties.
+Use the preview panel to visualize the form.
+Click "Save" to store the form.
 
-### Viewing Responses
-1. Click "Responses" to open the response viewer
-2. Select a form to view its responses
-3. Use the "Export CSV" button to download responses
+Using Templates
 
-## Acknowledgments
+Go to the "Templates" section.
+Select a pre-built or custom template.
+Customize as needed.
+Save custom templates with "Save as Template."
 
-- Icons by [Lucide](https://lucide.dev/)
-- Built with [React Remix](https://remix.run/) and [React](https://reactjs.org/)
+Sharing Forms
+
+Click "Share" to generate a unique URL.
+Copy the link with one click.
+Share the link with respondents.
+
+Viewing Responses
+
+Navigate to the "Responses" section.
+Select a form to view its submissions.
+Use the "Export CSV" button to download data.
+
+Acknowledgments
+
+Icons by Lucide.
+Powered by React Remix and React.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
