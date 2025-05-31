@@ -84,7 +84,7 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
     e.preventDefault();
     
     const dragIndex = e.dataTransfer.getData('fieldIndex');
-    if (dragIndex !== '') {
+ if (dragIndex !== '') {
       dispatch({
         type: 'REORDER_FIELDS',
         payload: {
@@ -128,7 +128,6 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
           <h2 className={`text-xl font-bold mb-2 ${
             darkMode ? 'text-white' : 'text-gray-800'
           }`}>
-            {form.title || 'Untitled Form'}
           </h2>
           
           <textarea
@@ -137,13 +136,13 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
               type: 'UPDATE_FORM_SETTINGS',
               payload: { description: e.target.value }
             })}
-            placeholder="Add form description (optional)"
+            placeholder="Add form description"
             className={`w-full p-2 rounded-lg border resize-none ${
               darkMode 
                 ? 'bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500' 
                 : 'bg-white/50 border-white/30 text-gray-800 placeholder-gray-400 backdrop-blur-sm'
             } focus:outline-none focus:ring-2 focus:ring-opacity-20 ${
-              darkMode ? 'focus:ring-cyan-500' : 'focus:ring-purple-500'
+              darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-500'
             }`}
             rows={2}
           />
@@ -161,8 +160,8 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
               className={`p-4 rounded-lg border transition-all ${
                 draggedOver === index 
                   ? darkMode 
-                    ? 'border-cyan-500 bg-gray-700/70' 
-                    : 'border-purple-400 bg-[#c0e6e9]/30'
+                    ? 'border-teal-500 bg-gray-700/70' 
+                    : 'border-teal-400 bg-teal-100/30'
                   : darkMode 
                     ? 'border-gray-700 bg-gray-700/50 hover:bg-gray-700/70' 
                     : 'border-white/30 bg-white/40 hover:bg-white/60 backdrop-blur-sm shadow-md'
@@ -186,7 +185,7 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
                     <span className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
                       darkMode 
                         ? 'bg-gray-600 text-gray-300' 
-                        : 'bg-[#f0d7db]/50 text-gray-600'
+                        : 'bg-teal-100/50 text-gray-600'
                     }`}>
                       {field.type}
                     </span>
@@ -208,7 +207,7 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
                           className={`text-xs px-2 py-1 rounded-md ${
                             darkMode 
                               ? 'bg-gray-600 text-gray-300' 
-                              : 'bg-[#c0e6e9]/40 text-gray-700'
+                              : 'bg-teal-100/40 text-gray-700'
                           }`}
                         >
                           {option}
@@ -224,7 +223,7 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
                     className={`p-1.5 rounded-md ${
                       darkMode 
                         ? 'hover:bg-gray-600 text-gray-400 hover:text-gray-200' 
-                        : 'hover:bg-[#c0e6e9]/50 text-gray-500 hover:text-gray-700'
+                        : 'hover:bg-teal-100/50 text-gray-500 hover:text-gray-700'
                     }`}
                   >
                     <Edit size={16} />
@@ -235,7 +234,7 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
                     className={`p-1.5 rounded-md ${
                       darkMode 
                         ? 'hover:bg-gray-600 text-gray-400 hover:text-red-400' 
-                        : 'hover:bg-[#f0d7db]/50 text-gray-500 hover:text-red-500'
+                        : 'hover:bg-red-100/50 text-gray-500 hover:text-red-500'
                     }`}
                   >
                     <Trash2 size={16} />
@@ -249,7 +248,7 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
             className={`p-4 rounded-lg border-2 border-dashed flex items-center justify-center cursor-pointer transition-colors ${
               darkMode 
                 ? 'border-gray-700 hover:border-gray-600 bg-gray-800/50 hover:bg-gray-700/50' 
-                : 'border-[#c0e6e9]/40 hover:border-[#c0e6e9]/70 bg-white/30 hover:bg-white/50 backdrop-blur-sm'
+                : 'border-teal-100/40 hover:border-teal-100/70 bg-white/30 hover:bg-white/50 backdrop-blur-sm'
             }`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -258,12 +257,12 @@ const FormCanvas = ({ form, dispatch, selectedField, setSelectedField, darkMode 
               <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center mb-2 ${
                 darkMode 
                   ? 'bg-gray-700 text-gray-400' 
-                  : 'bg-gray-300/40 text-gray-600'
+                  : 'bg-teal-100/40 text-gray-600'
               }`}>
                 <Plus size={20} />
               </div>
               <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
-                Drag components here or click to add
+                Drag components here to add
               </p>
             </div>
           </div>

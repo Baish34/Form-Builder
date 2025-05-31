@@ -1,5 +1,5 @@
 import { useState, useReducer, useEffect } from 'react';
-import { FileText, Copy, BarChart3, Save } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { useNavigate } from '@remix-run/react';
 import PreviewToggle from './PreviewToggle';
 import ThemeToggle from './ThemeToggle';
@@ -19,18 +19,18 @@ const formReducer = (state, action) => {
             fields: [...state.currentForm.fields, action.payload]
           }
         };
-      
+
       case 'UPDATE_FIELD':
         return {
           ...state,
           currentForm: {
             ...state.currentForm,
-            fields: state.currentForm.fields.map(field => 
+            fields: state.currentForm.fields.map(field =>
               field.id === action.payload.id ? { ...field, ...action.payload.updates } : field
             )
           }
         };
-      
+
       case 'DELETE_FIELD':
         return {
           ...state,
@@ -39,7 +39,7 @@ const formReducer = (state, action) => {
             fields: state.currentForm.fields.filter(field => field.id !== action.payload)
           }
         };
-      
+
       case 'REORDER_FIELDS':
         const fields = Array.from(state.currentForm.fields);
         const [reorderedField] = fields.splice(action.payload.source, 1);
@@ -51,13 +51,13 @@ const formReducer = (state, action) => {
             fields
           }
         };
-      
+
       case 'SET_FORM':
         return {
           ...state,
           currentForm: action.payload
         };
-      
+
       case 'ADD_STEP':
         return {
           ...state,
@@ -70,7 +70,7 @@ const formReducer = (state, action) => {
             }]
           }
         };
-      
+
       case 'UPDATE_FORM_SETTINGS':
         return {
           ...state,
@@ -79,7 +79,7 @@ const formReducer = (state, action) => {
             ...action.payload
           }
         };
-      
+
       default:
         return state;
     }
@@ -92,7 +92,7 @@ const formReducer = (state, action) => {
       historyIndex: state.historyIndex + 1
     };
   }
-  
+
   return newState;
 };
 
@@ -120,13 +120,13 @@ const FORM_TEMPLATES = {
 const FormBuilder = ({ setAppDarkMode }) => {
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (setAppDarkMode) {
       setAppDarkMode(darkMode);
     }
   }, [darkMode, setAppDarkMode]);
-  
+
   const [previewMode, setPreviewMode] = useState('desktop');
   const [selectedField, setSelectedField] = useState(null);
   const [showTemplates, setShowTemplates] = useState(false);
@@ -170,9 +170,9 @@ const FormBuilder = ({ setAppDarkMode }) => {
       const formsData = JSON.parse(localStorage.getItem('formBuilderForms') || '{}');
       formsData[state.currentForm.id] = state.currentForm;
       localStorage.setItem('formBuilderForms', JSON.stringify(formsData));
-      
+
       setShowSaveNotification(true);
-      
+
       setTimeout(() => {
         setShowSaveNotification(false);
       }, 3000);
@@ -203,34 +203,34 @@ const FormBuilder = ({ setAppDarkMode }) => {
       setShowTemplates(false);
     }
   };
-  
+
   const saveAsTemplate = () => {
     setTemplateName(state.currentForm.title);
     setShowSaveTemplateModal(true);
   };
-  
+
   const handleSaveTemplate = () => {
     if (!templateName.trim()) {
       alert('Please enter a template name');
       return;
     }
-    
+
     try {
       const templateKey = templateName.toLowerCase().replace(/\s+/g, '_');
-      
+
       const newTemplate = {
         name: templateName,
         fields: state.currentForm.fields
       };
-      
+
       const customTemplates = JSON.parse(localStorage.getItem('customFormTemplates') || '{}');
-      
+
       customTemplates[templateKey] = newTemplate;
-      
+
       localStorage.setItem('customFormTemplates', JSON.stringify(customTemplates));
-      
+
       FORM_TEMPLATES[templateKey] = newTemplate;
-      
+
       setShowSaveTemplateModal(false);
       setTemplateName('');
       alert(`Template "${templateName}" saved successfully!`);
@@ -248,14 +248,14 @@ const FormBuilder = ({ setAppDarkMode }) => {
     try {
       const shareId = generateFormId();
       const shareableForm = { ...state.currentForm, shareId };
-      
+
       const sharedForms = JSON.parse(localStorage.getItem('sharedForms') || '{}');
       sharedForms[shareId] = shareableForm;
       localStorage.setItem('sharedForms', JSON.stringify(sharedForms));
-      
+
       const url = `${window.location.origin}/?form=${shareId}`;
       setShareUrl(url);
-      
+
       navigator.clipboard.writeText(url).then(() => {
         setShowShareNotification(true);
         setTimeout(() => {
@@ -277,128 +277,95 @@ const FormBuilder = ({ setAppDarkMode }) => {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      darkMode 
-        ? 'bg-gray-900 text-gray-100' 
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode
+        ? 'bg-gray-900 text-gray-100'
         : 'bg-gray-50 text-gray-900'
-    }`}>
-      {/* Header */}
-      <header className={`relative px-6 py-4 ${
-        darkMode 
-          ? 'bg-gray-900 border-b border-gray-700/50' 
-          : 'bg-white border-b border-gray-200'
       }`}>
+      {/* Header */}
+      <header className={`relative px-6 py-4 ${darkMode
+          ? 'bg-gray-900 border-b border-gray-700/50'
+          : 'bg-white border-b border-gray-200'
+        }`}>
         {/* Background */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0 bg-[#111828]"></div>
         </div>
-        
+
         <div className="relative flex items-center justify-between">
           <div className="flex items-center space-x-6">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/25`}>
-                <FileText size={20} className="text-white" />
-              </div>              
-              <h1 className={`text-2xl font-bold ${
-                darkMode 
-                    ? 'text-purple-400' 
-                    : 'bg-gradient-to-r from-purple-600 to-purple-600 bg-clip-text text-transparent'
+              <h1 className={`text-2xl font-bold ${darkMode
+                  ? 'text-teal-400'
+                  : 'bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent'
                 }`}>
                 Form Builder
               </h1>
             </div>
-            
-            {/* Form Title Input */}
-            <div className="flex items-center space-x-3">
-              <div className={`w-px h-8 ${darkMode ? 'bg-gray-700' : 'bg-gray-300'}`}></div>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={state.currentForm.title}
-                  onChange={(e) => dispatch({
-                    type: 'UPDATE_FORM_SETTINGS',
-                    payload: { title: e.target.value }
-                  })}
-                  className={`px-4 py-2.5 rounded-xl border-0 bg-transparent font-medium text-lg transition-all focus:outline-none focus:ring-2 ${
-                    darkMode 
-                      ? 'text-gray-200 focus:ring-cyan-500/30 focus:bg-gray-800/50' 
-                      : 'text-gray-800 focus:ring-purple-500/30 focus:bg-white/80'
-                  } placeholder-gray-400`}
-                  placeholder="Form Title"
-                />
-              </div>
-            </div>
+           
           </div>
-          
+
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={saveAsTemplate}
+              className={`px-3 py-2 rounded-lg font-medium text-sm transition-colors ${darkMode
+                  ? 'bg-teal-800 text-emerald-300 border border-teal-700'
+                  : 'bg-emerald-100 text-teal-700 border border-emerald-200'
+                }`}
+            >
+              Save as Template
+            </button>
+
+            <button
+              onClick={() => setShowTemplates(true)}
+              className={`px-3 py-2 rounded-lg font-medium text-sm transition-colors ${darkMode
+                  ? 'bg-teal-800 text-emerald-300 border border-teal-700'
+                  : 'bg-emerald-100 text-teal-700 border border-emerald-200'
+                }`}
+            >
+              Templates
+            </button>
+
+            <button
+              onClick={viewResponses}
+              className={`px-3 py-2 rounded-lg font-medium text-sm transition-colors ${darkMode
+                  ? 'bg-teal-800 text-emerald-300 border border-teal-700'
+                  : 'bg-emerald-100 text-teal-700 border border-emerald-200'
+                }`}
+            >
+              Responses
+            </button>
+
+            <button
+              onClick={saveForm}
+              className={`px-3 py-2 rounded-lg font-medium text-sm transition-colors ${darkMode
+                  ? 'bg-teal-800 text-emerald-300 border border-teal-700'
+                  : 'bg-emerald-100 text-teal-700 border border-emerald-200'
+                }`}
+            >
+              Save
+            </button>
+
+            <button
+              onClick={shareForm}
+              className="px-4 py-2 rounded-lg font-medium text-sm transition-colors bg-teal-600 text-white"
+            >
+              Share
+            </button>
+          </div>
+
+
+
           <div className="flex items-center space-x-2">
             {/* Preview Toggle */}
-            <PreviewToggle 
-              previewMode={previewMode} 
+            <PreviewToggle
+              previewMode={previewMode}
               setPreviewMode={setPreviewMode}
               darkMode={darkMode}
             />
-            
-            {/* Action Buttons */}
-            <div className="flex items-center space-x-3">
-              
-              <button
-                onClick={saveForm}
-                className={`group px-3 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center space-x-2 ${
-                  darkMode 
-                    ? 'bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600' 
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 border border-gray-200 shadow-sm hover:shadow'
-                }`}
-              >
-                <Save size={16} className="transition-transform group-hover:scale-110" />
-                <span>Save</span>
-              </button>
-              
-              <button
-                onClick={saveAsTemplate}
-                className={`group px-3 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center space-x-2 ${
-                  darkMode 
-                    ? 'bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600' 
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 border border-gray-200 shadow-sm hover:shadow'
-                }`}
-              >
-                <FileText size={16} className="transition-transform group-hover:scale-110" />
-                <span>Template it</span>
-              </button>
 
-              <button
-                onClick={() => setShowTemplates(true)}
-                className={`group px-3 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center space-x-2 ${
-                  darkMode 
-                    ? 'bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600' 
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 border border-gray-200 shadow-sm hover:shadow'
-                }`}
-              >
-                <FileText size={16} className="transition-transform group-hover:scale-110" />
-                <span>Templates</span>
-              </button>
-              
-              <button
-                onClick={viewResponses}
-                className={`group px-3 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center space-x-2 ${
-                  darkMode 
-                    ? 'bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600' 
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 border border-gray-200 shadow-sm hover:shadow'
-                }`}
-              >
-                <BarChart3 size={16} className="transition-transform group-hover:scale-110" />
-                <span>Responses</span>
-              </button>
-              
-              <button
-                onClick={shareForm}
-                className="group px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white hover:shadow-purple-500/40"
-              >
-                <Copy size={16} className="transition-transform group-hover:scale-110" />
-                <span>Share</span>
-              </button>
-            </div>
-            
             {/* Theme Toggle */}
             <div className={`w-px h-8 ${darkMode ? 'bg-gray-700' : 'bg-gray-300'}`}></div>
             <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
@@ -409,7 +376,7 @@ const FormBuilder = ({ setAppDarkMode }) => {
       {/* Main Content */}
       <div className="flex h-[calc(100vh-85px)]">
         <FieldPalette darkMode={darkMode} />
-        
+
         <FormCanvas
           form={state.currentForm}
           dispatch={dispatch}
@@ -417,7 +384,7 @@ const FormBuilder = ({ setAppDarkMode }) => {
           setSelectedField={setSelectedField}
           darkMode={darkMode}
         />
-        
+
         <FormPreview
           form={state.currentForm}
           previewMode={previewMode}
@@ -438,16 +405,14 @@ const FormBuilder = ({ setAppDarkMode }) => {
       {/* Templates Modal */}
       {showTemplates && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className={`w-[450px] max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl ${
-            darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
-          }`}>
+          <div className={`w-[450px] max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
+            }`}>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-              <h3 className={`text-xl font-bold ${
-                darkMode ? 'text-purple-400' : 'text-gray-800'
-              }`}>
+              <h3 className={`text-xl font-bold ${darkMode ? 'text-teal-400' : 'text-gray-800'
+                }`}>
                 Choose Template
               </h3>
-              <button 
+              <button
                 onClick={() => setShowTemplates(false)}
                 className={`p-2 rounded-full hover:bg-gray-600 dark:hover:bg-gray-700`}
               >
@@ -456,32 +421,29 @@ const FormBuilder = ({ setAppDarkMode }) => {
                 </svg>
               </button>
             </div>
-            
+
             <div className="p-6">
               <div className="grid grid-cols-1 gap-3">
                 {Object.entries(FORM_TEMPLATES).map(([key, template]) => (
                   <div
                     key={key}
                     onClick={() => loadTemplate(key)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all hover:shadow-lg ${
-                      darkMode 
-                        ? 'border-gray-700 hover:border-gray-600 bg-gray-700/50 hover:bg-gray-700/80' 
+                    className={`p-4 rounded-xl border cursor-pointer transition-all hover:shadow-lg ${darkMode
+                        ? 'border-gray-700 hover:border-gray-600 bg-gray-700/50 hover:bg-gray-700/80'
                         : 'border-gray-200 hover:border-gray-300 bg-gray-50 hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                        darkMode 
-                          ? 'bg-gray-800 text-gray-300' 
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${darkMode
+                          ? 'bg-gray-800 text-gray-300'
                           : 'bg-gray-100 text-gray-700'
-                      }`}>
+                        }`}>
                         <FileText size={20} />
                       </div>
                       <div>
                         <h4 className="font-medium">{template.name}</h4>
-                        <p className={`text-sm ${
-                          darkMode ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
+                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'
+                          }`}>
                           {template.fields.length} fields included
                         </p>
                       </div>
@@ -490,15 +452,14 @@ const FormBuilder = ({ setAppDarkMode }) => {
                 ))}
               </div>
             </div>
-            
+
             <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end">
               <button
                 onClick={() => setShowTemplates(false)}
-                className={`py-2.5 px-5 rounded-xl font-medium transition-all ${
-                  darkMode 
-                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                className={`py-2.5 px-5 rounded-xl font-medium transition-all ${darkMode
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-300'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}
+                  }`}
               >
                 Cancel
               </button>
@@ -510,16 +471,14 @@ const FormBuilder = ({ setAppDarkMode }) => {
       {/* Save Template Modal */}
       {showSaveTemplateModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className={`w-[450px] rounded-2xl shadow-2xl overflow-hidden ${
-            darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
-          }`}>
+          <div className={`w-[450px] rounded-2xl shadow-2xl overflow-hidden ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
+            }`}>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-              <h3 className={`text-xl font-bold ${
-                darkMode ? 'text-purple-400' : 'text-gray-800'
-              }`}>
+              <h3 className={`text-xl font-bold ${darkMode ? 'text-teal-400' : 'text-gray-800'
+                }`}>
                 Save as Template
               </h3>
-              <button 
+              <button
                 onClick={() => setShowSaveTemplateModal(false)}
                 className={`p-2 rounded-full hover:bg-gray-400 dark:hover:bg-gray-700`}
               >
@@ -528,7 +487,7 @@ const FormBuilder = ({ setAppDarkMode }) => {
                 </svg>
               </button>
             </div>
-            
+
             <div className="p-6">
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2">Template Name</label>
@@ -538,46 +497,36 @@ const FormBuilder = ({ setAppDarkMode }) => {
                     value={templateName}
                     onChange={(e) => setTemplateName(e.target.value)}
                     placeholder="Enter template name"
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      darkMode 
-                        ? 'bg-gray-700 border-gray-600 text-gray-200' 
+                    className={`w-full px-4 py-3 rounded-xl border ${darkMode
+                        ? 'bg-gray-700 border-gray-600 text-gray-200'
                         : 'bg-gray-50 border-gray-200 text-gray-900'
-                    } focus:outline-none focus:ring-2 focus:ring-opacity-20 ${
-                      darkMode ? 'focus:ring-gray-500' : 'focus:ring-gray-300'
-                    }`}
+                      } focus:outline-none focus:ring-2 focus:ring-opacity-20 ${darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-300'
+                      }`}
                   />
                 </div>
                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                  This template will be available in your templates list for future use.
+                  This template can be used in future.
                 </p>
               </div>
-              
-              <div className="flex items-center p-3 rounded-lg bg-blue-50 dark:bg-gray-700/50 text-blue-800 dark:text-blue-300">
-                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="text-sm">Template will include {state.currentForm.fields.length} fields</span>
-              </div>
+
             </div>
-            
+
             <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
               <button
                 onClick={() => setShowSaveTemplateModal(false)}
-                className={`py-2.5 px-5 rounded-xl font-medium transition-all ${
-                  darkMode 
-                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                className={`py-2.5 px-5 rounded-xl font-medium transition-all ${darkMode
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-300'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                }`}
+                  }`}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveTemplate}
-                className={`py-2.5 px-5 rounded-xl font-medium transition-all ${
-                  darkMode 
-                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white' 
-                    : 'bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white'
-                } shadow-lg hover:shadow-xl`}
+                className={`py-2.5 px-5 rounded-xl font-medium transition-all ${darkMode
+                    ? 'bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white'
+                    : 'bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white'
+                  } shadow-lg hover:shadow-xl`}
               >
                 Save Template
               </button>
@@ -587,49 +536,41 @@ const FormBuilder = ({ setAppDarkMode }) => {
       )}
 
       {/* Auto-save Notification */}
-      <div className={`fixed bottom-4 left-4 transform transition-all duration-500 z-50 ${
-        showSaveNotification 
-          ? 'translate-y-0 opacity-100' 
+      <div className={`fixed bottom-4 left-4 transform transition-all duration-500 z-50 ${showSaveNotification
+          ? 'translate-y-0 opacity-100'
           : 'translate-y-full opacity-0 pointer-events-none'
-      }`}>
-        <div className={`px-4 py-3 rounded-lg shadow-lg flex items-center space-x-3 ${
-          darkMode 
-            ? 'bg-gray-800 border border-gray-600 text-gray-200' 
-            : 'bg-white border border-gray-200 text-gray-800'
         }`}>
-          <div className={`w-2 h-2 rounded-full animate-pulse ${
-            darkMode ? 'bg-green-400' : 'bg-green-500'
-          }`}></div>
-          <span className="text-sm font-medium">Form saved</span>
-          <div className={`text-xs px-2 py-1 rounded ${
-            darkMode ? 'bg-gray-700 text-gray-400' : 'bg-gray-100 text-gray-500'
+        <div className={`px-4 py-3 rounded-lg shadow-lg flex items-center space-x-3 ${darkMode
+            ? 'bg-gray-800 border border-gray-600 text-gray-200'
+            : 'bg-white border border-gray-200 text-gray-800'
           }`}>
+          <div className={`w-2 h-2 rounded-full animate-pulse ${darkMode ? 'bg-emerald-400' : 'bg-emerald-500'
+            }`}></div>
+          <span className="text-sm font-medium">Form saved</span>
+          <div className={`text-xs px-2 py-1 rounded ${darkMode ? 'bg-gray-700 text-gray-400' : 'bg-gray-100 text-gray-500'
+            }`}>
             {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </div>
         </div>
       </div>
-      
+
       {/* Share Notification */}
-      <div className={`fixed top-4 right-4 transform transition-all duration-300 z-50 ${
-        showShareNotification 
-          ? 'translate-y-0 opacity-100' 
+      <div className={`fixed top-4 right-4 transform transition-all duration-300 z-50 ${showShareNotification
+          ? 'translate-y-0 opacity-100'
           : '-translate-y-12 opacity-0 pointer-events-none'
-      }`}>
-        <div className={`px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 ${
-          darkMode 
-            ? 'bg-gray-800 border border-gray-600 text-gray-200' 
-            : 'bg-white border border-gray-200 text-gray-800 shadow-gray-200'
         }`}>
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            darkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-600'
+        <div className={`px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 ${darkMode
+            ? 'bg-gray-800 border border-gray-600 text-gray-200'
+            : 'bg-white border border-gray-200 text-gray-800 shadow-gray-200'
           }`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${darkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-600'
+            }`}>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
           <div>
-            <div className="font-medium">Form shared successfully!</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Link copied to clipboard</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Link Copied</div>
           </div>
         </div>
       </div>

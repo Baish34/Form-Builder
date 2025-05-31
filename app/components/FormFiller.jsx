@@ -169,10 +169,10 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
       errors[field.id]
         ? 'border-red-500 focus:border-red-500 bg-red-50'
         : darkMode 
-          ? 'bg-gray-700 border-gray-600 text-gray-200 focus:border-cyan-500 hover:border-gray-500' 
-          : 'bg-white border-gray-300 text-gray-900 focus:border-purple-500 hover:border-gray-400'
+          ? 'bg-gray-700 border-gray-600 text-gray-200 focus:border-teal-500 hover:border-gray-500' 
+          : 'bg-white border-gray-300 text-gray-900 focus:border-teal-500 hover:border-gray-400'
     } focus:outline-none focus:ring-4 focus:ring-opacity-20 ${
-      darkMode ? 'focus:ring-cyan-500' : 'focus:ring-purple-500'
+      darkMode ? 'focus:ring-teal-500' : 'focus:ring-teal-500'
     }`;
 
     switch (field.type) {
@@ -231,7 +231,7 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
                       : currentValues.filter(v => v !== option);
                     handleInputChange(field.id, newValues);
                   }}
-                  className="w-5 h-5 text-purple-600 rounded border-2 border-gray-300 focus:ring-2 focus:ring-purple-500"
+                  className="w-5 h-5 text-teal-600 rounded border-2 border-gray-300 focus:ring-2 focus:ring-teal-500"
                 />
                 <span className={`${darkMode ? 'text-gray-300 group-hover:text-white' : 'text-gray-700 group-hover:text-gray-900'} transition-colors`}>
                   {option}
@@ -252,7 +252,7 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
                   value={option}
                   checked={responses[field.id] === option}
                   onChange={(e) => handleInputChange(field.id, e.target.value)}
-                  className="w-5 h-5 text-purple-600 border-2 border-gray-300 focus:ring-2 focus:ring-purple-500"
+                  className="w-5 h-5 text-teal-600 border-2 border-gray-300 focus:ring-2 focus:ring-teal-500"
                 />
                 <span className={`${darkMode ? 'text-gray-300 group-hover:text-white' : 'text-gray-700 group-hover:text-gray-900'} transition-colors`}>
                   {option}
@@ -315,13 +315,13 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
   if (submitted) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${
-        darkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100' : 'bg-gradient-to-br from-purple-50 to-cyan-50 text-gray-900'
+        darkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100' : 'bg-gradient-to-br from-teal-50 to-emerald-50 text-gray-900'
       }`}>
         <div className={`max-w-lg w-full mx-4 p-8 rounded-2xl text-center shadow-2xl ${
           darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
         }`}>
           <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${
-            darkMode ? 'bg-green-800 text-green-400' : 'bg-green-100 text-green-600'
+            darkMode ? 'bg-emerald-900 text-emerald-400' : 'bg-emerald-100 text-emerald-600'
           } animate-pulse`}>
             <CheckCircle className="w-10 h-10" />
           </div>
@@ -334,7 +334,7 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
               darkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200'
             }`}>
               <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Response ID:</p>
-              <p className={`font-mono text-sm ${darkMode ? 'text-cyan-400' : 'text-purple-600'}`}>
+              <p className={`font-mono text-sm ${darkMode ? 'text-teal-400' : 'text-teal-600'}`}>
                 {responseId}
               </p>
             </div>
@@ -352,7 +352,7 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
 
   return (
     <div className={`min-h-screen transition-all duration-300 ${
-      darkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100' : 'bg-gradient-to-br from-purple-50 to-cyan-50 text-gray-900'
+      darkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100' : 'bg-gradient-to-br from-teal-50 to-emerald-50 text-gray-900'
     }`}>
       {/* Header with dark mode toggle */}
       <div className={`sticky top-0 z-10 backdrop-blur-xl border-b ${
@@ -388,7 +388,7 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
         <div className={`w-full h-1 ${darkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
           <div 
             className={`h-full transition-all duration-500 ${
-              darkMode ? 'bg-white' : 'bg-gradient-to-r from-purple-500 to-pink-500'
+              darkMode ? 'bg-white' : 'bg-gradient-to-r from-teal-500 to-emerald-500'
             }`}
             style={{ width: `${progress}%` }}
           />
@@ -416,7 +416,7 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
                   <span className="flex items-center">
                     <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium mr-3 ${
                       responses[field.id] && responses[field.id].toString().trim() !== ''
-                        ? darkMode ? 'bg-cyan-600 text-white' : 'bg-purple-600 text-white'
+                        ? darkMode ? 'bg-teal-600 text-white' : 'bg-teal-600 text-white'
                         : darkMode ? 'bg-gray-700 text-gray-400' : 'bg-gray-200 text-gray-600'
                     }`}>
                       {responses[field.id] && responses[field.id].toString().trim() !== '' ? '✓' : index + 1}
@@ -457,8 +457,8 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
                   isSubmitting
                     ? 'opacity-50 cursor-not-allowed'
                     : darkMode 
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1' 
-                      : 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
+                      ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1' 
+                      : 'bg-teal-600 hover:bg-teal-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
                 }`}
               >
                 {isSubmitting ? (
@@ -490,7 +490,7 @@ const FormFiller = ({ formId, initialDarkMode = false }) => {
             : 'bg-white border border-gray-200 text-gray-800'
         }`}>
           <div className={`w-2 h-2 rounded-full animate-pulse ${
-            darkMode ? 'bg-green-400' : 'bg-green-500'
+            darkMode ? 'bg-emerald-400' : 'bg-emerald-500'
           }`}></div>
           <span className="text-sm font-medium">Progress auto-saved</span>
           <div className={`text-xs px-2 py-1 rounded ${

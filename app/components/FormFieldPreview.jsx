@@ -9,8 +9,8 @@ const FormFieldPreview = ({ field, darkMode }) => {
   
   const baseInputClasses = `w-full p-3 border rounded-lg transition-all ${
     darkMode 
-      ? 'bg-gray-700 border-gray-600 text-gray-200 focus:border-cyan-500' 
-      : 'bg-white/70 border-[#c0e6e9]/50 text-gray-900 focus:border-purple-500 backdrop-blur-sm'
+      ? 'bg-gray-700 border-gray-600 text-gray-200 focus:border-teal-500' 
+      : 'bg-white/70 border-teal-100/50 text-gray-900 focus:border-teal-500 backdrop-blur-sm'
   } placeholder-gray-400 shadow-sm`;
 
   if (!isMounted) {
@@ -64,7 +64,7 @@ const FormFieldPreview = ({ field, darkMode }) => {
               <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                 darkMode 
                   ? 'border-gray-500 bg-gray-700' 
-                  : 'border-[#c0e6e9]/70 bg-white/50'
+                  : 'border-teal-100/70 bg-white/50'
               }`}>
                 {/* Empty checkbox */}
               </div>
@@ -82,7 +82,7 @@ const FormFieldPreview = ({ field, darkMode }) => {
               <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                 darkMode 
                   ? 'border-gray-500 bg-gray-700' 
-                  : 'border-[#c0e6e9]/70 bg-white/50'
+                  : 'border-teal-100/70 bg-white/50'
               }`}>
                 {/* Empty radio button */}
               </div>

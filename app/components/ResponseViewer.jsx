@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BarChart3, Download, ArrowLeft } from 'lucide-react';
+import { BarChart3, Download, ArrowLeft, Lightbulb, LightbulbOff } from 'lucide-react';
 
 const ResponseViewer = ({ darkMode, setDarkMode, onBack }) => {
   const [responses, setResponses] = useState([]);
@@ -10,15 +10,14 @@ const ResponseViewer = ({ darkMode, setDarkMode, onBack }) => {
 
   useEffect(() => {
     try {
-      // Load all forms and responses from localStorage
       const storedResponses = JSON.parse(localStorage.getItem('formResponses') || '{}');
       const formData = JSON.parse(localStorage.getItem('formBuilderForms') || '{}');
       const sharedForms = JSON.parse(localStorage.getItem('sharedForms') || '{}');
-      
+
       const allForms = { ...formData, ...sharedForms };
       setForms(allForms);
       setFormResponses(storedResponses);
-      
+
       if (selectedFormId) {
         setResponses(storedResponses[selectedFormId] || []);
         setForm(allForms[selectedFormId]);
@@ -43,10 +42,7 @@ const ResponseViewer = ({ darkMode, setDarkMode, onBack }) => {
           new Date(response.timestamp).toLocaleString(),
           ...form.fields.map(field => {
             const value = response.responses[field.id];
-            if (Array.isArray(value)) {
-              return `"${value.join(', ')}"`;
-            }
-            return `"${value || ''}"`;
+            return `"${Array.isArray(value) ? value.join(', ') : value || ''}"`;
           })
         ].join(','))
       ].join('\n');
@@ -63,276 +59,141 @@ const ResponseViewer = ({ darkMode, setDarkMode, onBack }) => {
     }
   };
 
-  // If no form is selected, show the form selection screen
-  if (!selectedFormId) {
-    return (
-      <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
-        <header className={`px-6 py-4 ${
-          darkMode 
-            ? 'bg-gray-900 border-b border-gray-700/50' 
-            : 'bg-white/70 backdrop-blur-md border-b border-gray-200'
-        }`}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <h2 className={`text-2xl font-bold ${
-                darkMode ? 'text-purple-400' : 'text-gray-800'
-              }`}>
-                Form Responses
-              </h2>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              {onBack && (
-                <button
-                  onClick={onBack}
-                  className={`px-4 py-2 rounded-xl font-medium transition-colors flex items-center space-x-2 ${
-                    darkMode 
-                      ? 'bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 hover:text-white border border-gray-700/50' 
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200 backdrop-blur-sm'
-                  }`}
-                >
-                  <ArrowLeft size={16} />
-                  <span>Back to Builder</span>
-                </button>
-              )}
-              
-              <div className="w-px h-8 bg-gray-300 dark:bg-gray-700"></div>
-              
-              <button
-                onClick={() => setDarkMode(!darkMode)}
-                className={`p-2 rounded-full ${
-                  darkMode ? 'bg-gray-800 text-yellow-400' : 'bg-gray-100 text-gray-700'
-                }`}
-              >
-                {darkMode ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" 
-                    />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" 
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
-          </div>
-        </header>
-        
-        <div className="p-6">
-          <p className={`mb-4 ${
-            darkMode ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            Select a form to view responses
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.entries(forms).map(([id, formData]) => {
-              const responseCount = (formResponses[id] || []).length;
-              
-              return (
-                <div
-                  key={id}
-                  onClick={() => handleFormSelect(id)}
-                  className={`p-6 rounded-xl border cursor-pointer transition-all ${
-                    darkMode 
-                      ? 'border-gray-700 hover:border-gray-600 bg-gray-800 hover:bg-gray-700' 
-                      : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 shadow-sm'
-                  }`}
-                >
-                  <h3 className="text-lg font-semibold mb-2">{formData.title}</h3>
-                  <div className="flex items-center justify-between">
-                    <span className={`text-sm ${
-                      darkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
-                      {formData.fields?.length || 0} fields
-                    </span>
-                    <span className={`px-3 py-1 rounded-full text-xs ${
-                      responseCount > 0
-                        ? darkMode 
-                          ? 'bg-green-900 text-green-300' 
-                          : 'bg-green-100 text-green-800'
-                        : darkMode
-                          ? 'bg-gray-700 text-gray-400'
-                          : 'bg-gray-100 text-gray-600'
-                    }`}>
-                      {responseCount} {responseCount === 1 ? 'response' : 'responses'}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-
-            {Object.keys(forms).length === 0 && (
-              <div className={`col-span-3 text-center py-12 ${
-                darkMode ? 'text-gray-400' : 'text-gray-500'
-              }`}>
-                <BarChart3 size={48} className="mx-auto mb-4 opacity-50" />
-                <p className="text-lg">No forms found</p>
-                <p>Create a form first to collect responses</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const pageClasses = `min-h-screen ${darkMode ? 'bg-teal-900 text-teal-100' : 'bg-emerald-50 text-emerald-900'}`;
+  const headerClasses = `px-6 py-4 flex items-center justify-between border-b ${darkMode
+    ? 'bg-teal-900 border-teal-700/50'
+    : 'bg-white/70 backdrop-blur-md border-emerald-200'}`;
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
-      <header className={`px-6 py-4 ${
-        darkMode 
-          ? 'bg-gray-900 border-b border-gray-700/50' 
-          : 'bg-white/70 backdrop-blur-md border-b border-gray-200'
-      }`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+    <div className={pageClasses}>
+      <header className={headerClasses}>
+        <div className="flex items-center space-x-3">
+          {selectedFormId ? (
             <button
               onClick={() => setSelectedFormId(null)}
-              className={`p-2 rounded-lg transition-colors ${
-                darkMode 
-                  ? 'bg-gray-800 hover:bg-gray-700 text-gray-300' 
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-              }`}
+              className={`p-2 rounded-lg ${darkMode ? 'bg-teal-800 text-teal-300' : 'bg-emerald-100 text-emerald-700'}`}
             >
               <ArrowLeft size={16} />
             </button>
-            <h2 className={`text-2xl font-bold ${
-              darkMode ? 'text-purple-400' : 'text-gray-800'
-            }`}>
-              {form?.title}
-            </h2>
-            <span className={`px-3 py-1 rounded-full text-xs ${
-              darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'
-            }`}>
+          ) : onBack && (
+            <button
+              onClick={onBack}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-colors ${darkMode
+                ? 'bg-teal-800/60 hover:bg-teal-700/60 text-teal-300 hover:text-white border border-teal-700/50'
+                : 'bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200'}`}
+            >
+              <ArrowLeft size={16} />
+              <span>Back</span>
+            </button>
+          )}
+
+          <h2 className={`text-2xl font-bold ${darkMode ? 'text-emerald-400' : 'text-emerald-800'}`}>
+            {selectedFormId ? form?.title : 'Form Responses'}
+          </h2>
+
+          {selectedFormId && (
+            <span className={`px-3 py-1 rounded-full text-xs ${darkMode ? 'bg-teal-800 text-teal-300' : 'bg-emerald-100 text-emerald-700'}`}>
               {responses.length} {responses.length === 1 ? 'response' : 'responses'}
             </span>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            {responses.length > 0 && (
-              <button
-                onClick={exportToCSV}
-                className={`px-4 py-2 rounded-xl font-medium transition-colors flex items-center space-x-2 ${
-                  darkMode 
-                    ? 'bg-green-700 hover:bg-green-600 text-white' 
-                    : 'bg-green-600 hover:bg-green-700 text-white'
-                }`}
-              >
-                <Download size={16} />
-                <span>Export CSV</span>
-              </button>
-            )}
-            
-            {onBack && (
-              <button
-                onClick={onBack}
-                className={`px-4 py-2 rounded-xl font-medium transition-colors flex items-center space-x-2 ${
-                  darkMode 
-                    ? 'bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 hover:text-white border border-gray-700/50' 
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-200'
-                }`}
-              >
-                <ArrowLeft size={16} />
-                <span>Back to Builder</span>
-              </button>
-            )}
-            
-            <div className="w-px h-8 bg-gray-300 dark:bg-gray-700"></div>
-            
+          )}
+        </div>
+
+        <div className="flex items-center space-x-3">
+          {selectedFormId && responses.length > 0 && (
             <button
-              onClick={() => setDarkMode(!darkMode)}
-              className={`p-2 rounded-full ${
-                darkMode ? 'bg-gray-800 text-yellow-400' : 'bg-gray-100 text-gray-700'
-              }`}
+              onClick={exportToCSV}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium ${darkMode
+                ? 'bg-emerald-700 hover:bg-emerald-600 text-white'
+                : 'bg-emerald-600 hover:bg-emerald-700 text-white'}`}
             >
-              {darkMode ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" 
-                  />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" 
-                  />
-                </svg>
-              )}
+              <Download size={16} />
+              <span>Export CSV</span>
             </button>
-          </div>
+          )}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className={`p-2 rounded-full ${darkMode ? 'bg-teal-800 text-emerald-400' : 'bg-emerald-100 text-emerald-700'}`}
+          >
+            {darkMode ? <Lightbulb size={20} /> : <LightbulbOff size={20} />}
+          </button>
         </div>
       </header>
-      
-      <div className="p-6">
-        {responses.length === 0 ? (
-          <div className={`text-center py-12 ${
-            darkMode ? 'text-gray-400' : 'text-gray-500'
-          }`}>
-            <BarChart3 size={48} className="mx-auto mb-4 opacity-50" />
-            <p className="text-lg">No responses yet</p>
-            <p>Share your form to start collecting responses</p>
-          </div>
+
+      <main className="p-6">
+        {!selectedFormId ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(forms).map(([id, formData]) => {
+                const responseCount = (formResponses[id] || []).length;
+                return (
+                  <div
+                    key={id}
+                    onClick={() => handleFormSelect(id)}
+                    className={`cursor-pointer p-5 rounded-xl border transition-all ${darkMode
+                      ? 'border-teal-700 hover:border-teal-600 bg-teal-800 hover:bg-teal-700'
+                      : 'border-emerald-200 hover:border-emerald-300 bg-white hover:bg-emerald-50 shadow-sm'}`}
+                  >
+                    <h3 className="text-lg font-semibold mb-2">{formData.title}</h3>
+                    <div className="flex justify-between text-sm">
+                      <span className={darkMode ? 'text-teal-400' : 'text-emerald-600'}>
+                        {formData.fields?.length || 0} fields
+                      </span>
+                      <span className={`px-3 py-1 rounded-full text-xs ${responseCount > 0
+                        ? darkMode ? 'bg-emerald-900 text-emerald-300' : 'bg-emerald-100 text-emerald-800'
+                        : darkMode ? 'bg-teal-700 text-teal-400' : 'bg-emerald-100 text-emerald-600'}`}>
+                        {responseCount} {responseCount === 1 ? 'response' : 'responses'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+              {Object.keys(forms).length === 0 && (
+                <div className={`col-span-3 text-center py-12 ${darkMode ? 'text-teal-400' : 'text-emerald-500'}`}>
+                  <BarChart3 size={48} className="mx-auto mb-4 opacity-50" />
+                  <p className="text-lg">No forms found</p>
+                </div>
+              )}
+            </div>
+          </>
         ) : (
-          <div className={`overflow-x-auto rounded-lg border shadow-lg ${
-            darkMode ? 'border-gray-700' : 'border-gray-200'
-          }`}>
-            <table className={`w-full ${
-              darkMode ? 'bg-gray-800' : 'bg-white'
-            }`}>
-              <thead className={`${
-                darkMode ? 'bg-gray-700' : 'bg-gray-50'
-              }`}>
-                <tr>
-                  <th className={`px-4 py-3 text-left text-sm font-medium ${
-                    darkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Timestamp
-                  </th>
-                  {form?.fields?.map((field) => (
-                    <th
-                      key={field.id}
-                      className={`px-4 py-3 text-left text-sm font-medium ${
-                        darkMode ? 'text-gray-300' : 'text-gray-700'
-                      }`}
-                    >
-                      {field.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className={`divide-y ${
-                darkMode ? 'divide-gray-700' : 'divide-gray-200'
-              }`}>
-                {responses.map((response) => (
-                  <tr key={response.id}>
-                    <td className={`px-4 py-3 text-sm ${
-                      darkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      {new Date(response.timestamp).toLocaleString()}
-                    </td>
-                    {form?.fields?.map((field) => (
-                      <td
-                        key={field.id}
-                        className={`px-4 py-3 text-sm ${
-                          darkMode ? 'text-gray-300' : 'text-gray-700'
-                        }`}
-                      >
-                        {Array.isArray(response.responses[field.id])
-                          ? response.responses[field.id].join(', ')
-                          : response.responses[field.id] || '-'}
-                      </td>
+          <>
+            {responses.length === 0 ? (
+              <div className={`text-center py-12 ${darkMode ? 'text-teal-400' : 'text-emerald-500'}`}>
+                <p className="text-lg">No responses yet</p>
+              </div>
+            ) : (
+              <div className={`overflow-x-auto rounded-lg border shadow-lg ${darkMode ? 'border-teal-700' : 'border-emerald-200'}`}>
+                <table className={`w-full text-sm ${darkMode ? 'bg-teal-800' : 'bg-white'}`}>
+                  <thead className={`${darkMode ? 'bg-teal-700' : 'bg-emerald-50'}`}>
+                    <tr>
+                      <th className={`px-4 py-3 text-left font-medium ${darkMode ? 'text-teal-300' : 'text-emerald-700'}`}>Timestamp</th>
+                      {form?.fields?.map(field => (
+                        <th key={field.id} className={`px-4 py-3 text-left font-medium ${darkMode ? 'text-teal-300' : 'text-emerald-700'}`}>
+                          {field.label}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {responses.map((response, i) => (
+                      <tr key={i} className={`${darkMode ? 'hover:bg-teal-700' : 'hover:bg-emerald-50'} border-t ${darkMode ? 'border-teal-600' : 'border-emerald-100'}`}>
+                        <td className="px-4 py-2">{new Date(response.timestamp).toLocaleString()}</td>
+                        {form.fields.map(field => (
+                          <td key={field.id} className="px-4 py-2">
+                            {Array.isArray(response.responses[field.id])
+                              ? response.responses[field.id].join(', ')
+                              : response.responses[field.id] || '-'}
+                          </td>
+                        ))}
+                      </tr>
                     ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
         )}
-      </div>
+      </main>
     </div>
   );
 };
