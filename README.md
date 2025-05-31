@@ -72,8 +72,6 @@ npm run dev
 yarn dev
 ```
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser.
-
 ## Usage Guide
 
 ### 🔧 Build a Form
