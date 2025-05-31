@@ -54,7 +54,7 @@ An advanced, user-friendly form building and response collection tool powered by
 
 1. Clone and set up the project:
 ```bash
-git clone []
+git clone [https://github.com/Baish34/Form-Builder.git]
 cd form-builder
 ```
 
