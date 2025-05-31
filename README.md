@@ -3,8 +3,7 @@
 
 An advanced, user-friendly form building and response collection tool powered by React Remix. Design powerful forms, distribute them effortlessly, and analyze responses — all through a modern and efficient UI.
 
-**Live Demo:** []
-**Video Demo:** []
+**Deployed Link:** [https://form-builder-chi-black.vercel.app/]
 
 
 ## 🚀 Key Features
